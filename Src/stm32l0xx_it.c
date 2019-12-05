@@ -155,5 +155,24 @@ void SysTick_Handler(void)
 
 /* USER CODE BEGIN 1 */
 
+/* ФУНКЦИЯ ПРЕРЫВАНИЯ DMA */
+void DMA1_Channel1_IRQHandler(void)
+{
+  __NOP();
+}
+
+/* ФУНКЦИЯ ПРЕРЫВАНИЯ ТАЙМЕРА */
+void TIM6_IRQHandler(void)
+{
+  TIM6->SR = 0;
+  ADC1->CR |= ADC_CR_ADSTART;
+}
+
+/* ФУНКЦИЯ ПРЕРЫВАНИЯ АЦП */
+void ADC1_COMP_IRQHandler(void)
+{
+  
+}
+
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
