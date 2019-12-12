@@ -38,6 +38,9 @@
 #include "stm32l0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "main_loop.h"
+#include "interface.h"
+#include "stdbool.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,12 +60,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+void test(void);
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+ 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -155,23 +158,37 @@ void SysTick_Handler(void)
 
 /* USER CODE BEGIN 1 */
 
+void test(void)
+{
+  GPIOC->ODR ^= TEST1_Pin ^ TEST2_Pin;
+}
+
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ DMA */
 void DMA1_Channel1_IRQHandler(void)
 {
-  __NOP();
+  if (DMA1->ISR & DMA_ISR_TEIF1)
+    while(1);
+  if (DMA1->ISR & DMA_ISR_TCIF1)
+  {
+    if (flag == false)
+     flag = true;
+  }
+  DMA1->IFCR |= DMA_IFCR_CGIF1;
+  //DMA1_Channel1->CCR &= ~DMA_CCR_EN;
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ ТАЙМЕРА */
 void TIM6_IRQHandler(void)
 {
-  TIM6->SR = 0;
-  ADC1->CR |= ADC_CR_ADSTART;
+  //TIM6->SR = 0;
+//  ADC1->CR |= ADC_CR_ADSTART;
+//  test();
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ АЦП */
 void ADC1_COMP_IRQHandler(void)
 {
-  
+  //ADC1->ISR |= ADC_ISR_EOC;
 }
 
 /* USER CODE END 1 */

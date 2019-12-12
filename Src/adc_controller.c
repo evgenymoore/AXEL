@@ -1,6 +1,6 @@
 /* ФАЙЛ ИНИЦИАЛИЗАЦИИ АЦП И ТАЙМЕРА */
+
 #include "adc_controller.h"
-#include "gpio.h"
 
 /* функция инициализации модуля АЦП */
 void adc_init(void)
@@ -12,26 +12,41 @@ void adc_init(void)
   ADC1->CR |= ADC_CR_ADCAL;      
   while (ADC1->CR & ADC_CR_ADCAL);
   
+  /* активация триггера*/
+  ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_CONT; //| ADC_CFGR1_EXTSEL;
+  
+  /* прерывания АЦП */
+//  ADC1->IER |= ADC_IER_OVRIE | ADC_IER_EOCIE | ADC_IER_EOSEQIE;
+//  //регистрация прерывания АЦП в модуле прерываний NVIC
+//  HAL_NVIC_SetPriority(ADC1_COMP_IRQn, 0, 0); 
+//  HAL_NVIC_EnableIRQ(ADC1_COMP_IRQn);  
+  
+  /* разрешение АЦП на работу с DMA*/
+  ADC1->CFGR1 |= ADC_CFGR1_DMAEN | ADC_CFGR1_DMACFG;
+  
   /* выбор каналов АЦП */
-  //время семплирования - 7.5 циклов
+  //ADC-X ADC-Y ADC-Z
+  ADC1->CHSELR |= ADC_CHSELR_CHSEL0 | ADC_CHSELR_CHSEL1 | ADC_CHSELR_CHSEL2;
+  
+  //ADC-P
+  //ADC1->CHSELR |= ADC_CHSELR_CHSEL7;
+  
+  /* время сэмплирования всех каналов АЦП */
+  //время сэмплирования - 7.5 циклов
   ADC1->SMPR |= 2; 
   
-  /* прерывания АЦП */
-  ADC1->IER |= ADC_IER_OVRIE;
-  //регистрация прерывания АЦП в модуле прерываний NVIC
-  HAL_NVIC_SetPriority(ADC1_COMP_IRQn, 0, 0); 
-  HAL_NVIC_EnableIRQ(ADC1_COMP_IRQn);  
+  /* включение АЦП */
+  ADC1->CR |= ADC_CR_ADEN;
   
-  /* выбор каналов АЦП */
-  ADC1->CHSELR |= ADC_CHSELR_CHSEL0 | ADC_CHSELR_CHSEL1 |
-    ADC_CHSELR_CHSEL2 | ADC_CHSELR_CHSEL7;
+  /* запуск преобразования АЦП */
+  ADC1->CR |= ADC_CR_ADSTART;
   
-  /* прерывания АЦП */
-  ADC1->CR |= ADC_CR_ADEN; 
+  /* проверка на готовность к преобразованию АЦП */
+  while (!(ADC1->ISR && ADC_ISR_ADRDY));
 }
 
 /* функция инициализации DMA для АЦП */
-void dma_init(uint32_t * memory, uint8_t * data)
+void dma_init(uint32_t * memory)
 {
   /* тактирование модуля DMA */
   RCC->AHBENR |= RCC_AHBENR_DMAEN;
@@ -43,7 +58,7 @@ void dma_init(uint32_t * memory, uint8_t * data)
   DMA1_Channel1->CMAR = (uint32_t) (memory);
   
   /* количество передаваемых данных */
-  DMA1_Channel1->CNDTR = (uint32_t) data;
+  DMA1_Channel1->CNDTR = 3;
   
   /* инкрементирование */
   DMA1_Channel1->CCR |= DMA_CCR_MINC;
@@ -55,12 +70,9 @@ void dma_init(uint32_t * memory, uint8_t * data)
   DMA1_Channel1->CCR |= DMA_CCR_PSIZE_0 | DMA_CCR_MSIZE_0;
   
   /* прерывания DMA */
-  DMA1_Channel1->CCR |= DMA_CCR_TEIE;
+  DMA1_Channel1->CCR |= DMA_CCR_TEIE | DMA_CCR_TCIE;
   HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0); 
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
-  
-  /* разрешение АЦП на работу с DMA*/
-  ADC1->CFGR1 |= ADC_CFGR1_DMAEN | ADC_CFGR1_DMACFG;
   
   /* активация канала DMA */
   DMA1_Channel1->CCR |= DMA_CCR_EN;
@@ -72,27 +84,30 @@ void tim6_init(void)
   /* тактирование таймера */
   RCC->APB1ENR |= RCC_APB1ENR_TIM6EN;
   
-  /* ARR value */
-  TIM6->ARR = 10 - 1;
+  /* активация триггера */
+  TIM6->CR2 |= TIM_CR2_MMS_1;
   
   /* prescaler value */
   TIM6->PSC = 32000 - 1;
   
+  /* ARR value */
+  TIM6->ARR = 10 - 1;
+  
   /* регистрация генерации событий */
   TIM6->EGR |= TIM_EGR_UG;
-  __NOP();
-  __NOP(); 
   
-  /* сброс статусного регистра */
-  TIM6->SR = 0;
-  
-  /* update interrupt enable */;
-  TIM6->DIER |= TIM_DIER_UIE;
-  
-  /* прерывания таймера */
-  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0); 
-  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
-  
-  /* активация таймера */
+  TIM6->SR = 0; 
+   
+//  TIM6->DIER |= TIM_DIER_UIE; 
+
+//  /* прерывания таймера */
+//  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0); 
+//  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn); 
+}
+
+/* функция запуска таймера TIM6 */
+void tim6_activate(void)
+{
+  /* запуск отсчета таймера */
   TIM6->CR1 |= TIM_CR1_CEN;
 }
