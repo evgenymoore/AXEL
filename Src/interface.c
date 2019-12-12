@@ -11,9 +11,11 @@ void send_message(uint16_t x, uint16_t y, uint16_t z)
   //1-й канал АЦП
   uart_buffer[1] = (uint8_t)(x >> 8);
   uart_buffer[2] = (uint8_t)(x);
+  
   //2-й канал АЦП
   uart_buffer[3] = (uint8_t)(y >> 8);
   uart_buffer[4] = (uint8_t)(y);
+  
   //3-й канал АЦП
   uart_buffer[5] = (uint8_t)(z >> 8);
   uart_buffer[6] = (uint8_t)(z);  

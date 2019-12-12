@@ -58,7 +58,7 @@ void dma_init(uint32_t * memory)
   DMA1_Channel1->CMAR = (uint32_t) (memory);
   
   /* количество передаваемых данных */
-  DMA1_Channel1->CNDTR = 3;
+  DMA1_Channel1->CNDTR = 4;
   
   /* инкрементирование */
   DMA1_Channel1->CCR |= DMA_CCR_MINC;
