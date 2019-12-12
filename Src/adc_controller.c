@@ -29,7 +29,7 @@ void adc_init(void)
   ADC1->CHSELR |= ADC_CHSELR_CHSEL0 | ADC_CHSELR_CHSEL1 | ADC_CHSELR_CHSEL2;
   
   //ADC-P
-  //ADC1->CHSELR |= ADC_CHSELR_CHSEL7;
+  ADC1->CHSELR |= ADC_CHSELR_CHSEL7;
   
   /* время сэмплирования всех каналов АЦП */
   //время сэмплирования - 7.5 циклов
@@ -58,7 +58,7 @@ void dma_init(uint32_t * memory)
   DMA1_Channel1->CMAR = (uint32_t) (memory);
   
   /* количество передаваемых данных */
-  DMA1_Channel1->CNDTR = 3;
+  DMA1_Channel1->CNDTR = 4;
   
   /* инкрементирование */
   DMA1_Channel1->CCR |= DMA_CCR_MINC;

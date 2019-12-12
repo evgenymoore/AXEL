@@ -2,7 +2,7 @@
 
 #include "main_loop.h"
 
-uint16_t memory_buffer[3];
+uint16_t memory_buffer[4];
 
 _Bool flag = false;
 
@@ -16,7 +16,7 @@ int run(void)
   {
     if (flag == true)
     {
-      send_message(memory_buffer[0], memory_buffer[1], memory_buffer[2]);
+      send_message(memory_buffer[0], memory_buffer[1], memory_buffer[2], memory_buffer[3]);
       flag = false;
     }
   }

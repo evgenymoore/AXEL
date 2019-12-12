@@ -5,7 +5,7 @@
 #include "interface.h"
 #include "stdbool.h"
 
-extern uint16_t memory_buffer[3];               //буфер хранения данных с АЦП
+extern uint16_t memory_buffer[4];               //буфер хранения данных с АЦП
 extern _Bool flag;                              //флаг отправки
 
 #endif /* __MAIN_LOOP_H */
