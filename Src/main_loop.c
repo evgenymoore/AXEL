@@ -3,6 +3,7 @@
 #include "main_loop.h"
 
 uint16_t memory_buffer[4];
+uint8_t resistance_value = 0x80;
 
 _Bool flag = false;
 
@@ -11,6 +12,7 @@ int run(void)
   tim6_init();
   dma_init((uint32_t *) memory_buffer);
   adc_init();
+  spi_2_init(resistance_value);
   tim6_activate();
   while (1)
   {

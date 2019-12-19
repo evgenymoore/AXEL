@@ -4,6 +4,7 @@
 #include "adc_controller.h"
 #include "interface.h"
 #include "stdbool.h"
+#include "spi_2_init.h"
 
 extern uint16_t memory_buffer[4];               //буфер хранения данных с АЦП
 extern _Bool flag;                              //флаг отправки
