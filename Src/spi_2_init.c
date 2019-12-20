@@ -7,8 +7,8 @@ void spi_2_init(uint8_t resistance_value)
   GPIOB->ODR &= ~SPI2_CS_Pin;
   
   /* передача адресных битов по MOSI */
-  uint8_t bit = 2;
-  while (bit > 0)
+  uint8_t address_bit = 2;
+  while (address_bit > 0)
   {
     /* address bit's = 0  */      
     GPIOB->ODR &= ~SPI2_MOSI_Pin;
@@ -21,7 +21,7 @@ void spi_2_init(uint8_t resistance_value)
     /* снятие уровня на CLK */
     GPIOB->ODR &= ~SPI2_SCK_Pin;
     
-    bit--;
+    address_bit--;
   }
   
   /* цикл передачи данных по MOSI */

@@ -40,6 +40,7 @@
 /* USER CODE BEGIN Includes */
 #include "main_loop.h"
 #include "interface.h"
+#include "spi_2_init.h"
 #include "stdbool.h"
 /* USER CODE END Includes */
 
@@ -65,7 +66,7 @@ void test(void);
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
- 
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -173,22 +174,23 @@ void DMA1_Channel1_IRQHandler(void)
     if (flag == false)
      flag = true;
   }
-  DMA1->IFCR |= DMA_IFCR_CGIF1;
+  DMA1->IFCR |= DMA_IFCR_CTCIF1;
+
   //DMA1_Channel1->CCR &= ~DMA_CCR_EN;
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ ТАЙМЕРА */
 void TIM6_IRQHandler(void)
 {
-  //TIM6->SR = 0;
-//  ADC1->CR |= ADC_CR_ADSTART;
-//  test();
+  TIM6->SR = 0;
+  ADC1->CR |= ADC_CR_ADSTART;
+  test();
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ АЦП */
 void ADC1_COMP_IRQHandler(void)
 {
-  //ADC1->ISR |= ADC_ISR_EOC;
+  ADC1->ISR |= ADC_ISR_EOC;
 }
 
 /* USER CODE END 1 */

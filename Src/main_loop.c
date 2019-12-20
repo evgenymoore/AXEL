@@ -11,13 +11,14 @@ int run(void)
 {
   tim6_init();
   dma_init((uint32_t *) memory_buffer);
-  adc_init();
+  adc_init(); 
   spi_2_init(resistance_value);
   tim6_activate();
   while (1)
   {
     if (flag == true)
     {
+      GPIOC->ODR ^= TEST1_Pin ^ TEST2_Pin;
       send_message(memory_buffer[0], memory_buffer[1], memory_buffer[2], memory_buffer[3]);
       flag = false;
     }
