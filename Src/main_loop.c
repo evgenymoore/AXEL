@@ -9,11 +9,13 @@ _Bool flag = false;
 
 int run(void)
 {
-  tim6_init();
+  //tim6_init();
+  tim2_init();
   dma_init((uint32_t *) memory_buffer);
   adc_init(); 
   spi_2_init(resistance_value);
-  tim6_activate();
+  //tim6_activate();
+  tim2_activate();
   while (1)
   {
     if (flag == true)
