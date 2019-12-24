@@ -13,10 +13,10 @@ void adc_init(void)
   while (ADC1->CR & ADC_CR_ADCAL);
   
   /* активация триггера по TIM6*/
-  //ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_CONT; //| ADC_CFGR1_EXTSEL;
+  //ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_EXTSEL;
   
   /* активация триггера по TIM2*/
-  ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_EXTSEL_1 | ADC_CFGR1_CONT; //| ADC_CFGR1_EXTSEL;
+  ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_EXTSEL_1;
   
   /* прерывания АЦП */
   //ADC1->IER |= ADC_IER_OVRIE | ADC_IER_EOCIE | ADC_IER_EOSEQIE;
@@ -43,7 +43,7 @@ void adc_init(void)
   
   /* запуск преобразования АЦП */
   ADC1->CR |= ADC_CR_ADSTART;
-  
+
   /* проверка на готовность к преобразованию АЦП */
   while (!(ADC1->ISR && ADC_ISR_ADRDY));
 }

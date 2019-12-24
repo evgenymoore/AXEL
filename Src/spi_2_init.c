@@ -14,7 +14,7 @@ void spi_2_init(uint8_t resistance_value)
     GPIOB->ODR &= ~SPI2_MOSI_Pin;
     HAL_Delay(1);
     
-    /* активация тактирование порта CLK - выставление уровня на CLK */
+    /* активация тактирование CLK - выставление уровня на CLK */
     GPIOB->ODR |= SPI2_SCK_Pin;
     HAL_Delay(1);
     
@@ -31,7 +31,7 @@ void spi_2_init(uint8_t resistance_value)
     (resistance_value >> shift) & 0x1 ? (GPIOB->ODR |= SPI2_MOSI_Pin) : (GPIOB->ODR &= ~SPI2_MOSI_Pin);
     HAL_Delay(1);
     
-    /* активация тактирование порта CLK - выставление уровня на CLK */
+    /* активация тактирование CLK - выставление уровня на CLK */
     GPIOB->ODR |= SPI2_SCK_Pin;
     HAL_Delay(1);
     
