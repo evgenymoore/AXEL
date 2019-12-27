@@ -13,7 +13,7 @@ void adc_init(void)
   while (ADC1->CR & ADC_CR_ADCAL);
   
   /* активация триггера по TIM6*/
-  //ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_EXTSEL;
+  //ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0;
   
   /* активация триггера по TIM2*/
   ADC1->CFGR1 |= ADC_CFGR1_EXTEN_0 | ADC_CFGR1_EXTSEL_1;
@@ -96,18 +96,17 @@ void tim6_init(void)
   TIM6->PSC = 32000 - 1;
   
   /* ARR value */
-  TIM6->ARR = 10 - 1;
+  TIM6->ARR = 100 - 1;
   
   /* регистрация генерации событий */
   TIM6->EGR |= TIM_EGR_UG;
   
   TIM6->SR = 0; 
    
-//  TIM6->DIER |= TIM_DIER_UIE; 
-//
-//  /* прерывания таймера */
-//  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0); 
-//  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn); 
+  //TIM6->DIER |= TIM_DIER_UIE; 
+  /* прерывания таймера */
+  //HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0); 
+  //HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn); 
 }
 
 /* функция запуска таймера TIM6 */
@@ -138,11 +137,10 @@ void tim2_init(void)
   
   TIM2->SR = 0; 
    
-//  TIM2->DIER |= TIM_DIER_UIE; 
-//
-//  /* прерывания таймера */
-//  HAL_NVIC_SetPriority(TIM2_DAC_IRQn, 0, 0); 
-//  HAL_NVIC_EnableIRQ(TIM2_DAC_IRQn); 
+  //TIM2->DIER |= TIM_DIER_UIE; 
+  /* прерывания таймера */
+  //HAL_NVIC_SetPriority(TIM2_DAC_IRQn, 0, 0); 
+  //HAL_NVIC_EnableIRQ(TIM2_DAC_IRQn); 
 }
 
 /* функция запуска таймера TIM2 */

@@ -61,12 +61,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-void test(void);
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+void test(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -175,16 +175,16 @@ void DMA1_Channel1_IRQHandler(void)
      flag = true;
   }
   DMA1->IFCR |= DMA_IFCR_CTCIF1;
-
+  
   //DMA1_Channel1->CCR &= ~DMA_CCR_EN;
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ ТАЙМЕРА */
 void TIM6_IRQHandler(void)
 {
-  TIM6->SR = 0;
-  ADC1->CR |= ADC_CR_ADSTART;
-  test();
+  TIM6->SR = 0; 
+  //GPIOC->ODR ^= TEST1_Pin ^ TEST2_Pin;
+  resistance_value += 0x5;
 }
 
 /* ФУНКЦИЯ ПРЕРЫВАНИЯ АЦП */

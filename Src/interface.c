@@ -29,4 +29,5 @@ void send_message(uint16_t x, uint16_t y, uint16_t z, uint16_t p)
   
   /* передача данных по UART */
   HAL_UART_Transmit(&huart1, uart_buffer, 9, 100);
+  
 }
